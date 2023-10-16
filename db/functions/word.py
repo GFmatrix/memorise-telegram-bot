@@ -41,3 +41,16 @@ def users_words_create(user_id, word_id, status):
                                  word_id=word_id, status=StatusEnum(int(status)))
     session.add(userswords)
     session.commit()
+
+
+def users_words_update(user_id, word_id, status):
+    """
+    Register a user in the database
+    """
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    session.query(UsersWordsTable).filter(
+        UsersWordsTable.user_id == user_id, UsersWordsTable.word_id == word_id).update({'status': StatusEnum(int(status))})
+    session.commit()

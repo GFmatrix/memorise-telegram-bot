@@ -3,7 +3,7 @@ from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from db.functions.user import register
 from bot.keyboards.user import main_keyboard_markup
-from db.functions.word import get_user_word, users_words_create, get_user_review_word
+from db.functions.word import get_user_word, users_words_create, get_user_review_word, users_words_update
 from db.functions.user import get_user_data
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -74,9 +74,9 @@ def review_words(update: Update, context: CallbackContext) -> None:
         word_keyboard = [
             [
                 InlineKeyboardButton(
-                    "✅ Known", callback_data=f"known-{word.id}-{user.id}-1"),
+                    "✅ Known", callback_data=f"review_known-{word.id}-{user.id}-1"),
                 InlineKeyboardButton(
-                    "♻️ Learn", callback_data=f"learn-{word.id}-{user.id}-2"),
+                    "♻️ Learn", callback_data=f"review_learn-{word.id}-{user.id}-2"),
             ],
 
         ]
@@ -94,7 +94,7 @@ def review_update_words(update: Update, context: CallbackContext) -> None:
     data = query.data.split('-')
     query.answer()
     if len(data) > 3:
-        users_words_create(data[2], data[1], data[3])
+        users_words_update(data[2], data[1], data[3])
     user = get_user_data(query.from_user.id)
     word = get_user_word(user.id)
     print(word)
@@ -102,9 +102,9 @@ def review_update_words(update: Update, context: CallbackContext) -> None:
         word_keyboard = [
             [
                 InlineKeyboardButton(
-                    "✅ Known", callback_data=f"known-{word.id}-{user.id}-1"),
+                    "✅ Known", callback_data=f"review_known-{word.id}-{user.id}-1"),
                 InlineKeyboardButton(
-                    "♻️ Learn", callback_data=f"learn-{word.id}-{user.id}-2"),
+                    "♻️ Learn", callback_data=f"review_learn-{word.id}-{user.id}-2"),
             ],
 
         ]
