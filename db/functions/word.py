@@ -64,3 +64,16 @@ def users_words_update(user_id, word_id, status):
     session.query(UsersWordsTable).filter(
         UsersWordsTable.user_id == user_id, UsersWordsTable.word_id == word_id).update({'status': StatusEnum(int(status))})
     session.commit()
+
+
+def word_create(word, word_translation, photo=None, audio=None):
+    """
+    Register a user in the database
+    """
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    word = WordsTable(word=word,
+                      word_translation=word_translation, photo=photo, audio=audio)
+    session.add(word)
+    session.commit()
