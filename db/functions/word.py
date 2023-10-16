@@ -17,6 +17,16 @@ def get_user_word(user_id):
     return result if result else None
 
 
+def get_word_by_id(word_id):
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    result = session.query(WordsTable).filter(
+        WordsTable.id == word_id).first()
+    return result if result else None
+
+
 def get_user_review_word(user_id):
     # Return new word for user with user_id
     # If there is no new word for user, return None

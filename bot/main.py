@@ -34,6 +34,8 @@ def main() -> None:
                 word.review_update_words, pattern='^review_known-'),
             CallbackQueryHandler(
                 word.review_update_words, pattern='^review_learn-'),
+            CallbackQueryHandler(
+                word.check_word, pattern='^check-'),
         ],
         states={
             # GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender)],
