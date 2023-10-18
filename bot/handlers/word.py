@@ -1,4 +1,5 @@
 
+from sympy import use
 from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
 from db.functions.user import register
@@ -69,7 +70,8 @@ def review_words_update(update: Update, context: CallbackContext) -> None:
 def check_word(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     data = query.data.split('-')
-    word = get_word_by_id(data[1])
+    user = get_user_data(query.from_user.id)
+    word = get_word_by_id(data[1], user.id)
     query.answer(word.word_translation, show_alert=True)
 
 
@@ -109,9 +111,10 @@ def add_new_word(update: Update, context: CallbackContext) -> None:
     else:
         text = message.text
     text = text.split('\n')
-    word = text[0]
-    word_translation = text[1]
-    word_create(word, word_translation, photo)
+    word_en = text[0]
+    word_ru = text[1]
+    word_uz = text[2]
+    word_create(word_en, word_ru, word_uz, photo)
     query.delete_message()
 
     context.bot.send_message(

@@ -1,3 +1,4 @@
+from ast import Call
 import logging
 from telegram.ext import Updater, CommandHandler, ConversationHandler, CallbackQueryHandler, MessageHandler, Filters
 from bot import config
@@ -42,7 +43,8 @@ def main() -> None:
                 user.start, pattern='add_cancel'),
             CallbackQueryHandler(
                 word.add_new_word, pattern='add_approve'),
-
+            CallbackQueryHandler(
+                user.settings, pattern=user_keyboard.SETTINGS_KEY),
 
             # type: ignore
         ],
@@ -53,7 +55,23 @@ def main() -> None:
                 CallbackQueryHandler(
                     word.add_new_word, pattern='add_approve'),
                 MessageHandler(Filters.all, word.add_word),],
-
+            states.SETTINGS: [
+                CallbackQueryHandler(
+                    user.reset, pattern=user_keyboard.RESET_KEY),
+                CallbackQueryHandler(
+                    user.back_to_menu, pattern=user_keyboard.BACK_KEY),
+                CallbackQueryHandler(
+                    user.language, pattern=user_keyboard.LANGUAGE_KEY),
+            ],
+            # states.LANGUAGE:[
+            #     CallbackQueryHandler()
+            # ],
+            states.RESET_CONFIRMATION: [
+                CallbackQueryHandler(
+                    user.reset_confirm, pattern=user_keyboard.RESET_CONFIRMATION_KEY),
+                CallbackQueryHandler(
+                    user.reset_denied, pattern=user_keyboard.RESET_DENIED_KEY),
+            ]
         },
         fallbacks=[CommandHandler('start', user.start),],
     )
